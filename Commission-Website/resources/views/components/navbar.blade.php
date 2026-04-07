@@ -18,5 +18,13 @@
         <a href="{{ route('pricing') }}" class="{{ $navBase }} {{ $navGlow }} {{ request()->routeIs('pricing') ? 'text-home-accent bg-blue-500/14 after:scale-x-100' : 'text-slate-700 hover:text-home-accent hover:bg-blue-500/16 after:scale-x-0 hover:after:scale-x-100' }}">Pricing</a>
         <a href="{{ route('status') }}" class="{{ $navBase }} {{ $navGlow }} {{ request()->routeIs('status') ? 'text-home-accent bg-blue-500/14 after:scale-x-100' : 'text-slate-700 hover:text-home-accent hover:bg-blue-500/16 after:scale-x-0 hover:after:scale-x-100' }}">Status</a>
         <a href="{{ route('contact') }}" class="{{ $navBase }} {{ $navGlow }} {{ request()->routeIs('contact') ? 'text-home-accent bg-blue-500/14 after:scale-x-100' : 'text-slate-700 hover:text-home-accent hover:bg-blue-500/16 after:scale-x-0 hover:after:scale-x-100' }}">Contact</a>
+        @auth
+            <form action="{{ route('logout') }}" method="POST" class="inline-block">
+                @csrf
+                <button type="submit" class="{{ $navBase }} text-slate-700 hover:text-home-accent hover:bg-blue-500/16">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="{{ $navBase }} {{ $navGlow }} {{ request()->routeIs('login') ? 'text-home-accent bg-blue-500/14 after:scale-x-100' : 'text-slate-700 hover:text-home-accent hover:bg-blue-500/16 after:scale-x-0 hover:after:scale-x-100' }}">Login</a>
+        @endauth
     </div>
 </nav>

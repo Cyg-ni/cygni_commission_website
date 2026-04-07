@@ -27,30 +27,30 @@
                             <th class="text-left text-xs uppercase tracking-wider text-home-accent border-b border-slate-300 px-3 py-3">Payment Status</th>
                             <th class="text-left text-xs uppercase tracking-wider text-home-accent border-b border-slate-300 px-3 py-3">Phase</th>
                             <th class="text-left text-xs uppercase tracking-wider text-home-accent border-b border-slate-300 px-3 py-3">Notes</th>
+                            @if(auth()->check() && auth()->user()->email === config('app.owner_email'))
+                            <th class="text-left text-xs uppercase tracking-wider text-home-accent border-b border-slate-300 px-3 py-3">Actions</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($commissions as $commission)
                         <tr>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm font-semibold">speed</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">2026-04-02</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Fully Paid</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Rendering</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm text-home-ink-soft">Final lighting pass in progress</td>
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm font-semibold">{{ $commission->commissioner_name }}</td>
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm">{{ $commission->date_started->format('Y-m-d') }}</td>
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm">{{ ucwords(str_replace('_', ' ', (string) $commission->payment_status)) }}</td>
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm">{{ ucfirst((string) $commission->phase) }}</td>
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm text-home-ink-soft">{{ $commission->notes ?? 'No notes' }}</td>
+                            @if(auth()->check() && auth()->user()->email === config('app.owner_email'))
+                            <td class="border-b border-slate-200 px-3 py-3 text-sm">
+                                <a href="{{ route('commissions.edit', $commission) }}" class="text-home-accent hover:text-home-accent-soft font-semibold transition-colors">Edit</a>
+                            </td>
+                            @endif
                         </tr>
+                        @empty
                         <tr>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm font-semibold">mina deadlock</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">2026-04-05</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Paid</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Lineart</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm text-home-ink-soft">Awaiting linework approval</td>
+                            <td colspan="{{ auth()->check() && auth()->user()->email === config('app.owner_email') ? 6 : 5 }}" class="border-b border-slate-200 px-3 py-3 text-sm text-center text-home-ink-soft">No commissions yet</td>
                         </tr>
-                        <tr>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm font-semibold">Michael B. Jordan</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">2026-04-06</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Yet to Receive</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm">Sketch</td>
-                            <td class="border-b border-slate-200 px-3 py-3 text-sm text-home-ink-soft">Draft thumbnails sent</td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

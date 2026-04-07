@@ -18,6 +18,18 @@
             <h1 class="mt-3 mb-2 font-serif text-4xl leading-tight">Commission Request Form</h1>
             <p class="m-0 text-home-ink-soft leading-relaxed">Please reach out to me via this form if you are interested in contacting me. You can also contact me via my Twitter handle, https://x.com/cygniiiii. </p>
 
+            @if (session('success'))
+                <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('warning'))
+                <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                    {{ session('warning') }}
+                </div>
+            @endif
+
             <div class="mt-6 rounded-2xl border border-slate-300/30 bg-slate-50/80 p-4">
                 <p class="m-0 text-sm font-semibold text-home-accent">Tip</p>
                 <p class="mt-2 mb-0 text-sm text-home-ink-soft">Please compile everything in a Pinterest board or a GoogleDrive for me to peruse. Or you can send the images over in a zip file or just as image stills once I contact you back.</p>
@@ -25,7 +37,8 @@
         </section>
 
         <section class="lg:col-span-3 rounded-3xl p-6 md:p-8 bg-white/90 border border-slate-400/20 shadow-xl">
-            <form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form action="{{ route('contact.store') }}" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @csrf
                 <div>
                     <label for="client_name" class="block text-sm font-semibold">Client Name</label>
                     <input id="client_name" name="client_name" type="text" placeholder="Your full name" class="mt-2 w-full rounded-xl border border-slate-300 px-3 py-2.5 bg-white">
@@ -71,7 +84,7 @@
                 </div>
 
                 <div class="md:col-span-2">
-                    <button type="button" class="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-linear-to-br from-home-accent to-home-accent-soft text-white text-sm font-bold tracking-wide shadow-lg hover:-translate-y-0.5 transition-transform duration-200">Submit Commission Inquiry</button>
+                    <button type="submit" class="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-linear-to-br from-home-accent to-home-accent-soft text-white text-sm font-bold tracking-wide shadow-lg hover:-translate-y-0.5 transition-transform duration-200">Submit Commission Inquiry</button>
                 </div>
             </form>
         </section>
