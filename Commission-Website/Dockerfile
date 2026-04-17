@@ -1,4 +1,4 @@
-FROM php:8.3-cli
+FROM php:8.4-cli
 
 # System dependencies + PHP extensions needed by Laravel.
 RUN apt-get update && apt-get install -y --no-install-recommends \
