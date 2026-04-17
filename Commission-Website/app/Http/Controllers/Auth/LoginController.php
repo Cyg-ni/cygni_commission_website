@@ -22,17 +22,25 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $ownerEmail = (string) config('app.owner_email');
-        $ownerPassword = (string) env('OWNER_PASSWORD', '');
+        $ownerEmail = trim((string) config('app.owner_email'));
+        $ownerPassword = trim((string) env('OWNER_PASSWORD', ''));
 
         if (strcasecmp($credentials['email'], $ownerEmail) === 0 && filled($ownerPassword)) {
-            User::query()->updateOrCreate(
+            $owner = User::query()->updateOrCreate(
                 ['email' => $ownerEmail],
                 [
                     'name' => (string) env('OWNER_NAME', 'Cygni'),
                     'password' => Hash::make($ownerPassword),
                 ]
             );
+
+            // Allow owner sign-in from environment credentials even if DB auth state drifted.
+            if (hash_equals($ownerPassword, (string) $credentials['password'])) {
+                Auth::login($owner, $request->boolean('remember'));
+                $request->session()->regenerate();
+
+                return redirect()->intended(route('status'));
+            }
         }
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
