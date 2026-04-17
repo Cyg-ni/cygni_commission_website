@@ -17,14 +17,12 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 # Install PHP and JS dependencies first for better Docker layer caching.
-COPY composer.json composer.lock* ./
+COPY . .
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
-COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy application source and build frontend assets.
-COPY . .
+# Build frontend assets.
 RUN npm run build
 
 # Warm framework caches for production startup.
