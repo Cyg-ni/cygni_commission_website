@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "buildCommand": "composer install --no-interaction --prefer-dist --optimize-autoloader && npm ci && npm run build",
+  "functions": {
+    "public/index.php": {
+      "runtime": "vercel-php@0.7.3"
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*\\.(?:css|js|map|json|png|jpg|jpeg|gif|svg|ico|webp|txt|woff|woff2|ttf))",
+      "dest": "/public/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.php"
+    }
+  ]
+}
