@@ -35,7 +35,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Create 15 sample commission records
-        Commission::factory(15)->create();
+        if (! Commission::query()->exists()) {
+            // Seed a starter queue only once.
+            Commission::factory(15)->create();
+        }
     }
 }
