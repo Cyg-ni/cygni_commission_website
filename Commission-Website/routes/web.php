@@ -16,6 +16,8 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
 Route::get('/status', [StatusController::class, 'index'])->name('status');
 Route::middleware('auth')->group(function () {
+    Route::get('/commissions/create', [CommissionController::class, 'create'])->name('commissions.create');
+    Route::post('/commissions', [CommissionController::class, 'store'])->name('commissions.store');
     Route::get('/commissions/{commission}/edit', [CommissionController::class, 'edit'])->name('commissions.edit');
     Route::patch('/commissions/{commission}', [CommissionController::class, 'update'])->name('commissions.update');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');

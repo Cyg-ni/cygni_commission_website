@@ -15,8 +15,19 @@
     <main class="w-full max-w-6xl mx-auto mt-6 px-4 md:px-6 pb-10">
         <section class="rounded-3xl p-6 md:p-8 bg-white/90 border border-slate-400/20 shadow-xl">
             <p class="m-0 text-xs font-bold tracking-wider text-home-accent uppercase">Status</p>
-            <h1 class="mt-3 mb-2 font-serif text-4xl md:text-5xl leading-tight">Commission Queue</h1>
+            <div class="mt-3 mb-2 flex items-center justify-between gap-3">
+                <h1 class="m-0 font-serif text-4xl md:text-5xl leading-tight">Commission Queue</h1>
+                @if(auth()->check() && auth()->user()->email === config('app.owner_email'))
+                    <a href="{{ route('commissions.create') }}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-lg bg-linear-to-br from-home-accent to-home-accent-soft text-white text-sm font-bold tracking-wide shadow-lg hover:-translate-y-0.5 transition-transform duration-200">+ Add Commission</a>
+                @endif
+            </div>
             <p class="m-0 text-home-ink-soft leading-relaxed">Track current commission progress in table format.</p>
+
+            @if (session('success'))
+                <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             @if (session('warning'))
                 <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
