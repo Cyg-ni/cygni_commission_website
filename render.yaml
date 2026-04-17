@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: cygni-commission-website
+    runtime: docker
+    region: ohio
+    dockerfilePath: Commission-Website/Dockerfile
+    dockerContext: Commission-Website
+    port: 10000
+    env:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
