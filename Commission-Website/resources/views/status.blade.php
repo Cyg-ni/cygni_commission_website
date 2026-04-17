@@ -18,6 +18,12 @@
             <h1 class="mt-3 mb-2 font-serif text-4xl md:text-5xl leading-tight">Commission Queue</h1>
             <p class="m-0 text-home-ink-soft leading-relaxed">Track current commission progress in table format.</p>
 
+            @if (session('warning'))
+                <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                    {{ session('warning') }}
+                </div>
+            @endif
+
             <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-300/35 bg-white">
                 <table class="w-full min-w-225 border-separate border-spacing-0">
                     <thead>

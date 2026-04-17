@@ -49,4 +49,4 @@ RUN set -eux; \
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "if [ -f /var/www/html/composer.json ]; then cd /var/www/html; else cd /var/www/html/Commission-Website; fi; php artisan config:cache || true; php artisan route:cache || true; php artisan view:cache || true; php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["sh", "-c", "if [ -f /var/www/html/composer.json ]; then cd /var/www/html; else cd /var/www/html/Commission-Website; fi; mkdir -p database; touch database/database.sqlite; php artisan config:cache || true; php artisan route:cache || true; php artisan view:cache || true; php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
