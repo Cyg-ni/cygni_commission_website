@@ -16,18 +16,28 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Install PHP and JS dependencies first for better Docker layer caching.
+# Copy repository contents from the selected Docker context.
 COPY . .
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
-RUN npm ci
-
-# Build frontend assets.
-RUN npm run build
-
-# Warm framework caches for production startup.
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
+# Install dependencies, build assets, and warm caches from the detected app directory.
+RUN set -eux; \
+    if [ -f /var/www/html/composer.json ]; then \
+        APP_DIR=/var/www/html; \
+    elif [ -f /var/www/html/Commission-Website/composer.json ]; then \
+        APP_DIR=/var/www/html/Commission-Website; \
+    else \
+        echo "composer.json not found in expected locations"; \
+        ls -la /var/www/html; \
+        exit 1; \
+    fi; \
+    cd "$APP_DIR"; \
+    composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts; \
+    npm ci; \
+    npm run build; \
+    php artisan config:cache; \
+    php artisan route:cache; \
+    php artisan view:cache
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["sh", "-c", "if [ -f /var/www/html/composer.json ]; then cd /var/www/html; else cd /var/www/html/Commission-Website; fi; php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
