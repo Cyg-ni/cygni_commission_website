@@ -19,7 +19,7 @@ WORKDIR /var/www/html
 # Copy repository contents from the selected Docker context.
 COPY . .
 
-# Install dependencies, build assets, and warm caches from the detected app directory.
+# Install dependencies and build assets from the detected app directory.
 RUN set -eux; \
     if [ -f /var/www/html/composer.json ]; then \
         APP_DIR=/var/www/html; \
@@ -33,11 +33,8 @@ RUN set -eux; \
     cd "$APP_DIR"; \
     composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts; \
     npm ci; \
-    npm run build; \
-    php artisan config:cache; \
-    php artisan route:cache; \
-    php artisan view:cache
+    npm run build
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "if [ -f /var/www/html/composer.json ]; then cd /var/www/html; else cd /var/www/html/Commission-Website; fi; php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["sh", "-c", "if [ -f /var/www/html/composer.json ]; then cd /var/www/html; else cd /var/www/html/Commission-Website; fi; php artisan config:cache || true; php artisan route:cache || true; php artisan view:cache || true; php artisan migrate --force --graceful; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
