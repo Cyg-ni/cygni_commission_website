@@ -25,8 +25,8 @@ class LoginController extends Controller
         $ownerEmail = (string) config('app.owner_email');
         $ownerPassword = (string) env('OWNER_PASSWORD', '');
 
-        if ($credentials['email'] === $ownerEmail && filled($ownerPassword)) {
-            User::query()->firstOrCreate(
+        if (strcasecmp($credentials['email'], $ownerEmail) === 0 && filled($ownerPassword)) {
+            User::query()->updateOrCreate(
                 ['email' => $ownerEmail],
                 [
                     'name' => (string) env('OWNER_NAME', 'Cygni'),

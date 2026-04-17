@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use RuntimeException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,18 +21,16 @@ class DatabaseSeeder extends Seeder
         $ownerEmail = env('OWNER_EMAIL', 'you@example.com');
         $ownerPassword = env('OWNER_PASSWORD');
 
-        if (blank($ownerPassword)) {
-            throw new RuntimeException('OWNER_PASSWORD is not set. Set OWNER_PASSWORD in .env before seeding.');
+        if (filled($ownerPassword)) {
+            // Create or update owner user for commission management.
+            User::query()->updateOrCreate(
+                ['email' => $ownerEmail],
+                [
+                    'name' => $ownerName,
+                    'password' => Hash::make($ownerPassword),
+                ]
+            );
         }
-
-        // Create or update owner user for commission management
-        User::query()->updateOrCreate(
-            ['email' => $ownerEmail],
-            [
-                'name' => $ownerName,
-                'password' => Hash::make($ownerPassword),
-            ]
-        );
 
         if (! Commission::query()->exists()) {
             // Seed a starter queue only once.
