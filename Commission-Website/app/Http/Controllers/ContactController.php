@@ -50,6 +50,6 @@ class ContactController extends Controller
             return redirect()->route('contact')->with('success', 'Commission request submitted successfully!')->with('warning', 'Your request was saved, but notification email could not be sent.');
         }
 
-        return redirect()->route('contact')->with('success', 'Commission request submitted successfully! I sent a notification to the owner email.');
+        return redirect()->route('contact')->with('success', 'Commission request submitted successfully! An email has been sent to Cygni, please expect a reply soon on the contact information you provided. Alternatively, you can contact her on her social media if she does not reach out within 2 business days.');
     }
 }
